@@ -1,5 +1,69 @@
 ## About
 
+DestroySoon encapsulates the common pattern of asynchronously removing ActiveRecord models. In complex systems where there is a [God](http://en.wikipedia.org/wiki/God_object) entity, the God descruction take a long time to run due to all dependent destruction. In this case it's a good ideia to place the heavy weight job to the background.
+
+DestroySoon uses [DelayedJob](https://github.com/collectiveidea/delayed_job) as queue processing system.
+
 [![Build Status](https://secure.travis-ci.org/redu/destroy-soon.png)](http://travis-ci.org/redu/destroy-soon)
+
+## Quickstart
+
+Add DestroySoon to your gemfile:
+
+```ruby
+gem 'destroy_soon', :git => 'git://github.com/redu/destroy-soon.git'
+```
+
+You just need to inject some behaivor to the object you want to destroy asynchronously:
+
+```ruby
+class Course < ActiveRecord::Base
+  include DestroySoon::ModelAdditions
+end
+```
+
+The ActiveRecord model should have a new column called ``destroy_soon``. This column will be setted to true when a destruction task is scheduled. You should generate a migration as follows:
+
+```sh
+$ rails g migration AddDestroySoonToCourse
+```
+
+Edit the migration to add the column:
+
+```ruby
+class AddDestroySoonToCourse < ActiveRecord::Migration
+  def self.up
+    add_column :courses, :destroy_soon, :boolean, :default => false
+    add_index :courses, :destroy_soon
+  end
+
+  def self.down
+    remove_column :courses, :destroy_soon
+  end
+end
+```
+
+And migrate the database using ``rake db:migrate``. In order to destroy Course instance in the backgroud call the ``async_destroy`` method:
+
+```ruby
+class CoursesController < BaseController
+  def destroy
+    @course = Course.find(params[:id])
+    @course.async_destroy
+
+    respond_with(@course)
+  end
+end
+```
+
+## Configuration
+
+You can use DelayedJob's named queues setting the queue name as follows:
+
+```ruby
+# config/initializers/destroy_soon.rb
+DestroySoon::Queue.default_queue = "destruction"
+```
+
 
 ``todo``
