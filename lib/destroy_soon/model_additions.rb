@@ -10,7 +10,7 @@ module DestroySoon::ModelAdditions
   def async_destroy
     unless self.destroy_soon
       self.update_attribute(:destroy_soon, true)
-      Delayed::Job.enqueue DestroySoon::Job.new(:entity => self)
+      Delayed::Job.enqueue(DestroySoon::Job.new(:entity => self), :queue => 'general')
     end
   end
 end
