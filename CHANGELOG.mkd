@@ -1,7 +1,12 @@
-## v0.0.1
+## v0.0.3
 
-* Initial release.
+* Configuring which delayed job queue to use
 
 ## v0.0.2
 
 * Fixing rubygems issue
+
+## v0.0.1
+
+* Initial release.
+

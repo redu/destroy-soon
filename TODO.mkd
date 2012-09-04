@@ -1,0 +1,3 @@
+* Create migration generator
+* initializer generator
+* write the docs
