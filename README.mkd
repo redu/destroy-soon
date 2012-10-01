@@ -64,10 +64,10 @@ You can use DelayedJob's named queues setting the queue name as follows:
 # config/initializers/destroy_soon.rb
 DestroySoon::Queue.default_queue = "destruction"
 ```
-
+ 
 <img src="https://github.com/downloads/redu/redupy/redutech-marca.png" alt="Redu Educational Technologies" width="300">
 
-Este projeto é financiado e mantido pelo [Redu Educational Techologies](http://tech.redu.com.br).
+This project is maintained and funded by [Redu Educational Techologies](http://tech.redu.com.br).
 
 # Copyright
 
