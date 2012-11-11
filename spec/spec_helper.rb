@@ -10,6 +10,7 @@ $:.unshift(File.dirname(__FILE__) + '/../lib')
 require "rubygems"
 require "bundler/setup"
 require "destroy_soon"
+require "delayed_job_active_record"
 
 ActiveRecord::Base.establish_connection(:adapter => 'sqlite3', :database => ':memory:')
 load("schema.rb")
