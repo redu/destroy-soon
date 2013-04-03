@@ -20,6 +20,24 @@ module DestroySoon
       Queue.new
     end
 
+    context ".new" do
+      it "should accept a :queue_name" do
+        job = mock('Job')
+        Delayed::Job.should_receive(:enqueue).with(job, {:queue => 'foobar'})
+        Queue.new(:queue_name => 'foobar').enqueue(job)
+      end
+
+      it "should default to .default_queue" do
+        Queue.default_queue = 'general'
+
+        job = mock('Job')
+        Delayed::Job.should_receive(:enqueue).with(job, {:queue => 'general'})
+        Queue.new.enqueue(job)
+
+        Queue.default_queue = nil
+      end
+    end
+
     it "should enqueue the job" do
       Delayed::Job.should_receive(:enqueue).with(job)
       subject.enqueue(job)

@@ -2,16 +2,15 @@ require 'active_support/core_ext'
 
 module DestroySoon
   class Queue
-    DEFAULT_QUEUE = nil
     cattr_accessor :default_queue
 
-    def initializer
-      @default_queue = default_queue || DEFAULT_QUEUE
+    def initialize(options={})
+      @queue = default_queue || options[:queue_name]
     end
 
     def enqueue(job)
       args = [job]
-      args << { :queue => default_queue } if default_queue
+      args << { :queue => @queue } if @queue
 
       Delayed::Job.enqueue(*args)
     end
